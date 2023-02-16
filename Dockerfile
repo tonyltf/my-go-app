@@ -7,6 +7,6 @@ RUN go mod download
 COPY *.go ./
 RUN go build -o /my-go-app
 
-EXPOSE 3333
+EXPOSE 80
 
 CMD [ "/my-go-app" ]
