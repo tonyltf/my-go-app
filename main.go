@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -17,5 +19,11 @@ func main() {
 		w.Write([]byte("hello world"))
 	})
 
-	http.ListenAndServe(":80", r)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "80"
+	}
+
+	fmt.Println("Running server at port " + port)
+	http.ListenAndServe(":"+port, r)
 }
