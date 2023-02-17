@@ -1,4 +1,4 @@
-basePath: /
+basePath: /v1
 info:
   contact:
     email: tingfung.tony@gmail.com
@@ -8,8 +8,12 @@ info:
   title: My Go App API
   version: "1.0"
 paths:
-  /:
+  /healthcheck:
     get:
-      responses: {}
-      summary: Test
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Health checking
 swagger: "2.0"
