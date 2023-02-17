@@ -3,6 +3,7 @@ package main
 import (
 	"my-go-app/app/exchange-rate/api/v1/router"
 	"my-go-app/app/exchange-rate/cron"
+	"my-go-app/build/db"
 )
 
 //	@title			My Go App API
@@ -16,6 +17,7 @@ import (
 //	@BasePath	/v1
 
 func main() {
+	go db.RunDb()
 	go cron.RunCron()
 	router.RunRouter()
 }
