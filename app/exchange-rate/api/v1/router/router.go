@@ -28,7 +28,7 @@ func RunRouter() {
 
 	router.Mount("/swagger", httpSwagger.WrapHandler)
 	router.Get("/swagger/*", httpSwagger.Handler(
-		httpSwagger.URL("http://localhost:"+port+"/swagger/doc.json"),
+		httpSwagger.URL("doc.json"),
 	))
 
 	router.Route("/v1", func(r chi.Router) {

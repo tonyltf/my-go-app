@@ -16,4 +16,22 @@ paths:
           schema:
             type: string
       summary: Health checking
+  /price/{exchange_pair}:
+    get:
+      parameters:
+      - description: Currency Pair
+        in: path
+        name: exchange_pair
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: number
+        "404":
+          description: Not found
+          schema:
+            type: string
+      summary: Get the last price
 swagger: "2.0"

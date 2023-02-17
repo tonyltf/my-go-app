@@ -31,6 +31,34 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/price/{exchange_pair}": {
+            "get": {
+                "summary": "Get the last price",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Currency Pair",
+                        "name": "exchange_pair",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     }
 }`
