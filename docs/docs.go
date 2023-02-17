@@ -34,7 +34,7 @@ const docTemplate = `{
         },
         "/price/{exchange_pair}": {
             "get": {
-                "summary": "Get the last price",
+                "summary": "Get the exchange price",
                 "parameters": [
                     {
                         "type": "string",
@@ -42,6 +42,52 @@ const docTemplate = `{
                         "name": "exchange_pair",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "timestamp",
+                        "name": "timestamp",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/price/{exchange_pair}/average": {
+            "get": {
+                "summary": "Get the average exchange price",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Currency Pair",
+                        "name": "exchange_pair",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "From time",
+                        "name": "from",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "To time",
+                        "name": "to",
+                        "in": "query"
                     }
                 ],
                 "responses": {
