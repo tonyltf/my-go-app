@@ -1,7 +1,15 @@
+basePath: /
 info:
-  contact: {}
+  contact:
+    email: tingfung.tony@gmail.com
+    name: Tony Li
+    url: https://github.com/tonyltf
   description: This is a simple app when learning Go
   title: My Go App API
   version: "1.0"
-paths: {}
+paths:
+  /:
+    get:
+      responses: {}
+      summary: Test
 swagger: "2.0"

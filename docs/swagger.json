@@ -3,8 +3,20 @@
     "info": {
         "description": "This is a simple app when learning Go",
         "title": "My Go App API",
-        "contact": {},
+        "contact": {
+            "name": "Tony Li",
+            "url": "https://github.com/tonyltf",
+            "email": "tingfung.tony@gmail.com"
+        },
         "version": "1.0"
     },
-    "paths": {}
+    "basePath": "/",
+    "paths": {
+        "/": {
+            "get": {
+                "summary": "Test",
+                "responses": {}
+            }
+        }
+    }
 }
