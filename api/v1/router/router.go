@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"my-go-app/app/exchange-rate/api/v1/handlers"
+	"my-go-app/api/v1/handlers"
 
 	_ "my-go-app/docs"
 

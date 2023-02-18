@@ -1,9 +1,9 @@
 package main
 
 import (
-	"my-go-app/app/exchange-rate/api/v1/router"
-	"my-go-app/app/exchange-rate/cron"
-	"my-go-app/build/db"
+	"my-go-app/api/v1/router"
+	db "my-go-app/init"
+	cron "my-go-app/internal"
 )
 
 //	@title			My Go App API
