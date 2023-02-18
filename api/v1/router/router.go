@@ -21,11 +21,6 @@ func RunRouter() {
 	router.Use(middleware.Logger)
 	router.Use(middleware.Recoverer)
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "80"
-	}
-
 	router.Mount("/swagger", httpSwagger.WrapHandler)
 	router.Get("/swagger/*", httpSwagger.Handler(
 		httpSwagger.URL("doc.json"),
@@ -34,6 +29,11 @@ func RunRouter() {
 	router.Route("/v1", func(r chi.Router) {
 		r.Mount("/", handlers.Routes())
 	})
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "80"
+	}
 
 	fmt.Println("Running server at port " + port)
 	err := http.ListenAndServe(":"+port, router)
