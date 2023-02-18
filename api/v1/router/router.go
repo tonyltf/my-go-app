@@ -14,7 +14,7 @@ import (
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
-func RunRouter() {
+func InitRouter() {
 	router := chi.NewRouter()
 
 	router.Use(middleware.RequestID)

@@ -1,11 +1,11 @@
-package db
+package init
 
 import (
 	"fmt"
 	"os"
 )
 
-func RunDb() {
+func InitDb() {
 	os.Remove(("database.db"))
 	file, err := os.Create("database.db")
 	if err != nil {

@@ -10,8 +10,8 @@ func task() {
 	fmt.Println("I am running task.")
 }
 
-func RunCron() {
+func InitCron() {
 	// gocron.Every(1).Second().Do(task)
-	gocron.Every(1).Minute().Do(task)
+	gocron.Every(60).Seconds().Do(task)
 	<-gocron.Start()
 }
