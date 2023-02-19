@@ -1,4 +1,4 @@
-package init
+package config
 
 import (
 	"log"
@@ -7,8 +7,10 @@ import (
 )
 
 type envConfigs struct {
-	ApiInterval int    `mapstructure:"API_INTERVAL"`
-	ApiSource   string `mapstructure:"API_SOURCE"`
+	ApiInterval  int    `mapstructure:"API_INTERVAL"`
+	ApiSource    string `mapstructure:"API_SOURCE"`
+	DbConnection string `mapstructure:"DB_CONNECTION"`
+	DbDriver     string `mapstructure:"DB_DRIVER"`
 }
 
 func InitConfig() (config *envConfigs) {
@@ -23,5 +25,6 @@ func InitConfig() (config *envConfigs) {
 	if err := viper.Unmarshal(&config); err != nil {
 		log.Fatal(err)
 	}
+
 	return config
 }

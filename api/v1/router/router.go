@@ -1,6 +1,7 @@
 package router
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"os"
@@ -14,7 +15,7 @@ import (
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
-func InitRouter() {
+func InitRouter(ctx context.Context) {
 	router := chi.NewRouter()
 
 	router.Use(middleware.RequestID)

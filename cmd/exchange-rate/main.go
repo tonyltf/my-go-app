@@ -1,8 +1,8 @@
 package main
 
 import (
+	"context"
 	"my-go-app/api/v1/router"
-	config "my-go-app/init"
 	db "my-go-app/init"
 	cron "my-go-app/internal"
 )
@@ -18,8 +18,11 @@ import (
 //	@BasePath	/v1
 
 func main() {
-	go config.InitConfig()
-	go db.InitDb()
-	go cron.InitCron()
-	router.InitRouter()
+	ctx := context.Background()
+
+	db.InitDb(ctx)
+	// config.InitConfig()
+
+	go cron.InitCron(ctx)
+	router.InitRouter(ctx)
 }

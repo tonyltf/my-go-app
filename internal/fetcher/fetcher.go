@@ -1,10 +1,11 @@
 package fetcher
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
-	config "my-go-app/init"
+	config "my-go-app/configs"
 	"my-go-app/internal/database/model"
 	"net/http"
 	"strconv"
@@ -27,23 +28,9 @@ type Ticker struct {
 	Error     string `json:"error"`
 }
 
-type MyTime struct {
-	time.Time
-}
-
-func (m *MyTime) UnmarshalJSON(data []byte) error {
-	// Ignore null, like in the main JSON package.
-	fmt.Println(data)
-	if string(data) == "null" || string(data) == `""` {
-		return nil
-	}
-	// Fractional seconds are handled implicitly by Parse.
-	tt, err := time.Parse(`"`+time.RFC3339+`"`, string(data))
-	*m = MyTime{tt}
-	return err
-}
-
-func FetchRate(base string, target string) (*model.Rate, error) {
+func FetchRate(ctx context.Context, base string, target string) (*model.Rate, error) {
+	// fmt.Println(ctx.Value("apiSource"))
+	// apiSource := ctx.Value("apiSource").(string)
 	envConfig := config.InitConfig()
 	apiSource := envConfig.ApiSource
 	apiSource = strings.Replace(apiSource, "{base}", strings.ToLower(base), 1)
@@ -60,15 +47,14 @@ func FetchRate(base string, target string) (*model.Rate, error) {
 	}
 
 	b, err := io.ReadAll(res.Body)
-	// str := string(b)
 
 	var m Ticker
 	err = json.Unmarshal(b, &m)
 	if err != nil {
 		return nil, fmt.Errorf("Convert JSON error: %w", err)
 	}
-	CreatedAt := time.Unix(m.Timestamp, 0)
 
+	CreatedAt := time.Unix(m.Timestamp, 0)
 	ExchangeRate, err := strconv.ParseFloat(m.Ticker.Price, 64)
 	if err != nil {
 		return nil, fmt.Errorf("Parse price error: %w", err)
