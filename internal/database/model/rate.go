@@ -9,6 +9,6 @@ import (
 type Rate struct {
 	ID           uuid.UUID `json:"id"`
 	CurrencyPair string    `json:"currency_pair"`
-	ExchangeRate float32   `json:"exchange_rate"`
+	ExchangeRate float64   `json:"exchange_rate"`
 	CreatedAt    time.Time `json:"created_at"`
 }

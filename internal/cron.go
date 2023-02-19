@@ -9,7 +9,12 @@ import (
 
 func task() {
 	fmt.Println("I am running task.")
-	fetcher.FetchRate("BTC", "USD")
+	rate, err := fetcher.FetchRate("BTC", "USD")
+	if err != nil {
+		fmt.Printf("Error in cron job: %v\n", err)
+	}
+
+	fmt.Println(rate)
 }
 
 func InitCron() {
