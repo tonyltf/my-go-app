@@ -5,14 +5,12 @@ import (
 	"database/sql"
 	"fmt"
 	"my-go-app/internal/database/model"
-
-	"github.com/google/uuid"
 )
 
 func Create(ctx context.Context, db *sql.DB, rate *model.Rate) (*model.Rate, error) {
 
 	r := &model.Rate{
-		ID:           uuid.New(),
+		ID:           rate.ID,
 		CurrencyPair: rate.CurrencyPair,
 		ExchangeRate: rate.ExchangeRate,
 		CreatedAt:    rate.CreatedAt,

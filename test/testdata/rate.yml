@@ -1,0 +1,4 @@
+- id: RAW=uuid_generate_v4()
+  currency_pair: BTCUSD
+  exchange_rate: 25000
+  created_at: 2023-02-19 23:54:03 +0800 HKT

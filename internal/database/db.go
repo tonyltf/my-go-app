@@ -4,13 +4,17 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	config "my-go-app/configs"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
 // Reference: https://github.com/g8rswimmer/go-data-access-example
 func Open(ctx context.Context, stmts []string) (*sql.DB, error) {
-	db, err := sql.Open("sqlite3", "/database.db")
+	envConfig := config.InitConfig()
+	dbSource := envConfig.DbConnection
+	dbDrive := envConfig.DbDriver
+	db, err := sql.Open(dbDrive, dbSource)
 	if err != nil {
 		return nil, fmt.Errorf("sqlite database open error %w", err)
 	}
