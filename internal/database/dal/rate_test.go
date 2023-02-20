@@ -23,7 +23,7 @@ var (
 func TestMain(m *testing.M) {
 	var err error
 
-	if _, err = os.Stat("database_test.db"); err == nil {
+	if _, err = os.Stat("../../../database_test.db"); err == nil {
 		err := os.Remove("../../../database_test.db")
 		if err != nil {
 			fmt.Println(err)
@@ -70,4 +70,20 @@ func TestCreate(t *testing.T) {
 		t.Errorf("Error when create new record: %v", err)
 	}
 	assert.Equal(t, rate, newRate)
+}
+
+func TestRead(t *testing.T) {
+	created_at, err := time.Parse("2006-01-02 15:04:05", "2023-02-20 00:00:00")
+	if err != nil {
+		t.Errorf("Error when setting CreatedAt: %v", err)
+	}
+	r := &model.Rate{
+		CurrencyPair: "BTCUSD",
+		CreatedAt:    created_at,
+	}
+	rate, err := Read(context.Background(), db, r)
+	if err != nil {
+		t.Errorf("Error when reading database: %v", err)
+	}
+	assert.NotNil(t, rate)
 }
