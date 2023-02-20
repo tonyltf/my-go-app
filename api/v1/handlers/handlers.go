@@ -42,7 +42,7 @@ func GetLastExchangePrice(w http.ResponseWriter, r *http.Request) {
 	timestamp := r.URL.Query().Get("timestamp")
 	fmt.Printf("Price for %s at %s.\n", exchangePair, timestamp)
 
-	rate := service.GetLastRate(context.Background(), exchangePair)
+	rate := service.GetRate(context.Background(), exchangePair, &timestamp)
 	if rate != nil {
 		w.Write([]byte(*rate))
 		return

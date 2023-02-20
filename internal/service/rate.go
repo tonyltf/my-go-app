@@ -6,9 +6,11 @@ import (
 	"fmt"
 	"my-go-app/internal/database"
 	"my-go-app/internal/database/dal"
+	"strconv"
+	"time"
 )
 
-func GetLastRate(ctx context.Context, currencyPair string) *string {
+func GetRate(ctx context.Context, currencyPair string, timestamp *string) *string {
 
 	db, err := database.Open(ctx, nil)
 	if err != nil {
@@ -24,7 +26,12 @@ func GetLastRate(ctx context.Context, currencyPair string) *string {
 	base := pair[0:3]
 	target := pair[3:]
 	fmt.Printf("From %s - %s\n", base, target)
-	rate, err := dal.Read(ctx, db, base+target, nil)
+	i, err := strconv.ParseInt(*timestamp, 10, 64)
+	if err != nil {
+		fmt.Println(err)
+	}
+	timestampValue := time.Unix(i, 0)
+	rate, err := dal.Read(ctx, db, base+target, &timestampValue)
 	if err != nil {
 		fmt.Printf("Error in reading rate %v\n", err)
 		return nil
