@@ -77,11 +77,11 @@ func TestRead(t *testing.T) {
 	if err != nil {
 		t.Errorf("Error when setting CreatedAt: %v", err)
 	}
-	r := &model.Rate{
-		CurrencyPair: "BTCUSD",
-		CreatedAt:    created_at,
-	}
-	rate, err := Read(context.Background(), db, r)
+	// r := &model.Rate{
+	// 	CurrencyPair: "BTCUSD",
+	// 	CreatedAt:    created_at,
+	// }
+	rate, err := Read(context.Background(), db, "BTCUSD", &created_at)
 	if err != nil {
 		t.Errorf("Error when reading database: %v", err)
 	}

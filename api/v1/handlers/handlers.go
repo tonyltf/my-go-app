@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	"context"
 	"fmt"
+	"my-go-app/internal/service"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -39,12 +41,14 @@ func GetLastExchangePrice(w http.ResponseWriter, r *http.Request) {
 	exchangePair := chi.URLParam(r, "exchangePair")
 	timestamp := r.URL.Query().Get("timestamp")
 	fmt.Printf("Price for %s at %s.\n", exchangePair, timestamp)
-	if exchangePair == "BTCUSD" {
-		w.Write([]byte("24000"))
-	} else {
-		http.Error(w, http.StatusText(404), 404)
+
+	rate := service.GetLastRate(context.Background(), exchangePair)
+	if rate != nil {
+		w.Write([]byte(*rate))
 		return
 	}
+	http.Error(w, http.StatusText(404), 404)
+	return
 }
 
 //	@Summary	Get the average exchange price

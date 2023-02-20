@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"fmt"
 	config "my-go-app/configs"
+	"path/filepath"
+	"runtime"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -14,7 +16,11 @@ func Open(ctx context.Context, stmts []string) (*sql.DB, error) {
 	envConfig := config.InitConfig()
 	dbSource := envConfig.DbConnection
 	dbDrive := envConfig.DbDriver
-	db, err := sql.Open(dbDrive, dbSource)
+
+	_, b, _, _ := runtime.Caller(0)
+	basepath := filepath.Dir(b)
+
+	db, err := sql.Open(dbDrive, basepath+"/../../"+dbSource)
 	if err != nil {
 		return nil, fmt.Errorf("sqlite database open error %w", err)
 	}

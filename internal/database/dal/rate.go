@@ -27,13 +27,23 @@ func Create(ctx context.Context, db *sql.DB, rate *model.Rate) (*model.Rate, err
 
 }
 
-func Read(ctx context.Context, db *sql.DB, rate *model.Rate) (*model.Rate, error) {
+func Read(ctx context.Context, db *sql.DB, currencyPair string, createdAt *time.Time) (*model.Rate, error) {
 	var id string
 	var currency_pair string
 	var exchange_rate float64
 	var created_at time.Time
-	const stmt = `SELECT id, currency_pair, exchange_rate, created_at FROM rate WHERE currency_pair = ? AND created_at >= ? ORDER BY created_at DESC`
-	row, err := db.QueryContext(ctx, stmt, rate.CurrencyPair, rate.CreatedAt)
+	var stmt string
+	var row *sql.Rows
+	var err error
+
+	if createdAt != nil {
+		stmt = `SELECT id, currency_pair, exchange_rate, created_at FROM rate WHERE currency_pair = ? AND created_at >= ? ORDER BY created_at DESC`
+		row, err = db.QueryContext(ctx, stmt, currencyPair, createdAt)
+	} else {
+		stmt = `SELECT id, currency_pair, exchange_rate, created_at FROM rate WHERE currency_pair = ? ORDER BY created_at DESC`
+		row, err = db.QueryContext(ctx, stmt, currencyPair)
+	}
+
 	if err != nil {
 		return nil, fmt.Errorf("Read error %w", err)
 	}
