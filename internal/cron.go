@@ -13,7 +13,7 @@ import (
 )
 
 func task(ctx context.Context, db *sql.DB) {
-	fmt.Println("I am running task.")
+	fmt.Println("Getting latest price...")
 	apiSource := config.InitConfig().ApiSource
 	myFetcher, err := fetcher.NewFetcher(apiSource)
 	if err != nil {
@@ -30,11 +30,10 @@ func task(ctx context.Context, db *sql.DB) {
 		fmt.Printf("Error in cron job (TransformRate): %v\n", err)
 		return
 	}
-	r, err := dal.Create(ctx, db, rate)
+	_, err = dal.Create(ctx, db, rate)
 	if err != nil {
 		fmt.Printf("Insert rate error %v\n", err)
 	}
-	fmt.Println(r)
 }
 
 func InitCron(ctx context.Context) {

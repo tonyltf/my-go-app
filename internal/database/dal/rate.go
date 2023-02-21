@@ -12,6 +12,9 @@ import (
 
 func Create(ctx context.Context, db *sql.DB, rate *model.Rate) (*model.Rate, error) {
 
+	if rate == nil {
+		return nil, fmt.Errorf("Rate is nil")
+	}
 	r := &model.Rate{
 		ID:           rate.ID,
 		CurrencyPair: rate.CurrencyPair,
@@ -37,8 +40,8 @@ func Read(ctx context.Context, db *sql.DB, currencyPair string, createdAt *time.
 	var err error
 
 	if createdAt != nil {
-		stmt = `SELECT id, currency_pair, exchange_rate, created_at FROM rate WHERE currency_pair = ? AND created_at >= ? ORDER BY created_at DESC`
-		row, err = db.QueryContext(ctx, stmt, currencyPair, createdAt)
+		stmt = `SELECT id, currency_pair, exchange_rate, created_at FROM rate WHERE currency_pair = ? AND created_at <= ? ORDER BY created_at ASC`
+		row, err = db.QueryContext(ctx, stmt, currencyPair, *createdAt)
 	} else {
 		stmt = `SELECT id, currency_pair, exchange_rate, created_at FROM rate WHERE currency_pair = ? ORDER BY created_at DESC`
 		row, err = db.QueryContext(ctx, stmt, currencyPair)
@@ -47,6 +50,8 @@ func Read(ctx context.Context, db *sql.DB, currencyPair string, createdAt *time.
 	if err != nil {
 		return nil, fmt.Errorf("Read error %w", err)
 	}
+
+	defer row.Close()
 	if row.Next() {
 		err = row.Scan(&id, &currency_pair, &exchange_rate, &created_at)
 		if err != nil {

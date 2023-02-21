@@ -11,19 +11,25 @@ import (
 
 func TestGetLastRate(t *testing.T) {
 	ctx := context.Background()
-	rate_1 := GetRate(ctx, "XXXXXX", nil)
-	assert.Equal(t, rate_1, nil)
+	_, err := GetRate(ctx, "XXXXXX", nil)
+	assert.NotNil(t, err)
 
-	rate_2 := GetRate(ctx, "BTCUSD", nil)
-	assert.NotEmpty(t, rate_2)
+	rate_2, err := GetRate(ctx, "BTCUSD", nil)
+	if err != nil {
+		t.Errorf("Error in TestGetLastRate: %v", err)
+	}
+	assert.NotEmpty(t, *rate_2)
 }
 func TestGetRate(t *testing.T) {
 	ctx := context.Background()
 	now := time.Now()
 	unix := fmt.Sprintf("%v", now.Unix())
-	rate_1 := GetRate(ctx, "XXXXXX", &unix)
-	assert.Equal(t, rate_1, nil)
+	_, err := GetRate(ctx, "XXXXXX", &unix)
+	assert.NotNil(t, err)
 
-	rate_2 := GetRate(ctx, "BTCUSD", &unix)
-	assert.NotEmpty(t, rate_2)
+	rate_2, err := GetRate(ctx, "BTCUSD", &unix)
+	if err != nil {
+		t.Errorf("Error in TestGetRate: %v", err)
+	}
+	assert.NotEmpty(t, *rate_2)
 }
