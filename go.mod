@@ -16,6 +16,7 @@ require (
 	github.com/Netflix/go-env v0.0.0-20220526054621-78278af1949d // indirect
 	github.com/PuerkitoBio/goquery v1.8.1 // indirect
 	github.com/andybalholm/cascadia v1.3.1 // indirect
+	github.com/beldur/kraken-go-api-client v0.0.0-20210512194559-2c29669c4ecc // indirect
 	github.com/cardigann/go-cloudflare-scraper v0.0.0-20200425223932-91bd9b1006f2 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect

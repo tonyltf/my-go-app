@@ -46,6 +46,8 @@ github.com/PuerkitoBio/goquery v1.8.1 h1:uQxhNlArOIdbrH1tr0UXwdVFgDcZDrZVdcpygAc
 github.com/PuerkitoBio/goquery v1.8.1/go.mod h1:Q8ICL1kNUJ2sXGoAhPGUdYDJvgQgHzJsnnd3H7Ho5jQ=
 github.com/andybalholm/cascadia v1.3.1 h1:nhxRkql1kdYCc8Snf7D5/D3spOX+dBgjA6u8x004T2c=
 github.com/andybalholm/cascadia v1.3.1/go.mod h1:R4bJ1UQfqADjvDa4P6HZHLh/3OxWWEqc0Sk8XGwHqvA=
+github.com/beldur/kraken-go-api-client v0.0.0-20210512194559-2c29669c4ecc h1:nYdDKeiMVAH4DnBv6PDoOZtxUcCFj5jRL6M4anypjTE=
+github.com/beldur/kraken-go-api-client v0.0.0-20210512194559-2c29669c4ecc/go.mod h1:NtR1i+x0BHgyscUkgG1FlAokpIxNDKgLO3301OLxWt0=
 github.com/cardigann/go-cloudflare-scraper v0.0.0-20200425223932-91bd9b1006f2 h1:DYQ/ugkvCFdvZUf5d6RlLxmZTL3R6NOAjfMcCXZBmEA=
 github.com/cardigann/go-cloudflare-scraper v0.0.0-20200425223932-91bd9b1006f2/go.mod h1:yzwU7pub3vYvHwvYOpbXfJ5OC8srFoqFmij8ZtQpymI=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
