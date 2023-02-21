@@ -16,7 +16,7 @@ func NewRandom() IFetcher {
 	return &Random{
 		Fetcher: Fetcher{
 			apiPath: "",
-			myFetchFunc: func(base string, target string) error {
+			myFetchFunc: func(f *Fetcher, base, target string) error {
 				return nil
 			},
 			myTransformFunc: func(f *Fetcher) (*model.Rate, error) {
