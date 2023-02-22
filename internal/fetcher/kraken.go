@@ -3,6 +3,7 @@ package fetcher
 import (
 	"fmt"
 	"my-go-app/internal/database/model"
+	"strconv"
 	"strings"
 	"time"
 
@@ -22,16 +23,20 @@ func NewKraken() IFetcher {
 				api := krakenapi.New("", "")
 				ticker, err := api.Ticker(base + target)
 				if err != nil {
-					return fmt.Errorf("Api Ticker error: %w", err)
+					return fmt.Errorf("Api Ticker error: %v", err)
 				}
 
 				newBase := strings.Replace(base, "BTC", "XXBTZ", 1)
 				newTarget := strings.Replace(target, "BTC", "XXBTZ", 1)
+				exchangeRate, err := strconv.ParseFloat(ticker.GetPairTickerInfo(newBase + newTarget).Ask[0], 64)
+				if err != nil {
+					return fmt.Errorf("Parse asking price error: %v", err)
+				}
 
 				rate := &model.Rate{
 					ID:           uuid.New(),
 					CurrencyPair: strings.ToUpper(base + target),
-					ExchangeRate: ticker.GetPairTickerInfo(newBase + newTarget).OpeningPrice,
+					ExchangeRate: exchangeRate,
 					CreatedAt:    time.Now(),
 				}
 				f.myRate = rate
