@@ -7,6 +7,7 @@
 ## Run (Docker)
 
 `docker-compose build && docker-compose up`
+
 API Document: `http://localhost/swagger/index.html`
 
 ## Deployment (Read-only)
@@ -16,6 +17,7 @@ API Document: `http://localhost/swagger/index.html`
   * Login Heroku Dashboard, create/select a project
   * In Deploy section, select GitHub and connect to the repo
   * Run Deploy Branch under Manual deploy
+  
 API Document: `https://my-go-app.herokuapp.com/swagger/index.html`
 
 ## Enhancement
