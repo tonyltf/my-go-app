@@ -1,9 +1,7 @@
 package config
 
 import (
-	"fmt"
 	"log"
-	"os/exec"
 	"path/filepath"
 	"runtime"
 
@@ -19,33 +17,8 @@ type envConfigs struct {
 
 func InitConfig() (config *envConfigs) {
 
-	cmd := exec.Command("ls", "-la")
-	stdout, err := cmd.Output()
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
-	fmt.Println(string(stdout))
-
-	cmd = exec.Command("ls", "-la", "app/configs")
-	stdout, err = cmd.Output()
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
-	fmt.Println(string(stdout))
-
-	cmd = exec.Command("ls", "-la", "configs")
-	stdout, err = cmd.Output()
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
-	fmt.Println(string(stdout))
-
 	_, b, _, _ := runtime.Caller(0)
 	configpath := filepath.Dir(b)
-	fmt.Println(configpath)
 	viper.AddConfigPath(configpath)
 	viper.AddConfigPath("./")
 	viper.AddConfigPath("/app")

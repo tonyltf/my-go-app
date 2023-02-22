@@ -12,6 +12,7 @@ import (
 func InitDb(ctx context.Context) {
 	envConfig := config.InitConfig()
 	dbFile := envConfig.DbConnection
+	fmt.Println(dbFile)
 
 	if _, err := os.Stat(dbFile); err == nil {
 		fmt.Printf("Database File exists\n")
