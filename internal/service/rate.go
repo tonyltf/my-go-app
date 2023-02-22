@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func GetRate(ctx context.Context, currencyPair string, timestamp *string) (*string, error) {
+func GetRate(ctx context.Context, currencyPair string, timestamp string) (*string, error) {
 
 	db, err := database.Open(ctx, nil)
 	if err != nil {
@@ -28,9 +28,9 @@ func GetRate(ctx context.Context, currencyPair string, timestamp *string) (*stri
 	var timestampValue time.Time
 	var timestampPointer *time.Time
 	timestampPointer = nil
-	fmt.Printf("From %s - %s at %s\n", base, target, *timestamp)
-	if *timestamp != "" {
-		i, err = strconv.ParseInt(*timestamp, 10, 64)
+	if timestamp != "" {
+		fmt.Printf("From %s - %s at %s\n", base, target, timestamp)
+		i, err = strconv.ParseInt(timestamp, 10, 64)
 		if err != nil {
 			fmt.Println(err)
 		}

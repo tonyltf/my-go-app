@@ -42,7 +42,7 @@ func GetLastExchangePrice(w http.ResponseWriter, r *http.Request) {
 	timestamp := r.URL.Query().Get("timestamp")
 	fmt.Printf("Price for %s at %s.\n", exchangePair, timestamp)
 
-	rate, err := service.GetRate(context.Background(), exchangePair, &timestamp)
+	rate, err := service.GetRate(context.Background(), exchangePair, timestamp)
 	if err != nil {
 		if err.Error() == "Exchange rate is missing" {
 			http.Error(w, http.StatusText(404), 404)

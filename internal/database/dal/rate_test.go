@@ -57,22 +57,28 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
+func prepareTestDatabase() {
+	if err := fixtures.Load(); err != nil {
+		fmt.Printf("Error when preparing test database: %v", err)
+	}
+}
+
 func TestCreate(t *testing.T) {
 	rate := &model.Rate{
 		ID:           uuid.New(),
 		CurrencyPair: "BTCUSD",
-		ExchangeRate: 25000,
+		ExchangeRate: 25000.0,
 		CreatedAt:    time.Now(),
 	}
 	newRate, err := Create(context.Background(), db, rate)
 	if err != nil {
-		fmt.Println()
 		t.Errorf("Error when create new record: %v", err)
 	}
 	assert.Equal(t, rate, newRate)
 }
 
 func TestRead(t *testing.T) {
+	prepareTestDatabase()
 	created_at, err := time.Parse("2006-01-02 15:04:05", "2023-02-20 00:00:00")
 	if err != nil {
 		t.Errorf("Error when setting CreatedAt: %v", err)
@@ -86,4 +92,5 @@ func TestRead(t *testing.T) {
 		t.Errorf("Error when reading database: %v", err)
 	}
 	assert.NotNil(t, rate)
+	assert.Equal(t, 25000.0, rate.ExchangeRate)
 }
