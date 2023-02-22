@@ -1,7 +1,9 @@
 package config
 
 import (
+	"fmt"
 	"log"
+	"os"
 	"path/filepath"
 	"runtime"
 
@@ -16,7 +18,8 @@ type envConfigs struct {
 }
 
 func InitConfig() (config *envConfigs) {
-
+	fmt.Println(os.Getenv("ENV"))
+	env := os.Getenv("ENV")
 	_, b, _, _ := runtime.Caller(0)
 	configpath := filepath.Dir(b)
 	viper.AddConfigPath(configpath)
@@ -24,7 +27,11 @@ func InitConfig() (config *envConfigs) {
 	viper.AddConfigPath("/app")
 	viper.AddConfigPath("/app/configs")
 	viper.AddConfigPath("/my-go-app/configs")
-	viper.SetConfigName("default.json")
+	if env == "PRODUCTIOn" {
+		viper.SetConfigName("production.json")
+	} else {
+		viper.SetConfigName("default.json")
+	}
 	viper.SetConfigType("json")
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatal("Error reading env file: ", err)

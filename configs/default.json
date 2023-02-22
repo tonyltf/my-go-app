@@ -1,6 +1,6 @@
 {
-  "DB_DRIVER": "sqlite3",
-  "DB_CONNECTION": "database.db",
+  "DB_DRIVER": "postgres",
+  "DB_CONNECTION": "postgresql://postgres:postgres@db/postgres?sslmode=disable",
   "API_INTERVAL": 60,
   "API_SOURCE": "kraken"
 }

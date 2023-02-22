@@ -28,7 +28,7 @@ func (d *Dal) Create(rate *model.Rate) (*model.Rate, error) {
 		CreatedAt:    rate.CreatedAt,
 	}
 
-	const stmt = `INSERT INTO rate (id, currency_pair, exchange_rate, created_at) VALUES (?, ?, ?, ?)`
+	const stmt = `INSERT INTO rate (id, currency_pair, exchange_rate, created_at) VALUES ($1, $2, $3, $4)`
 	if _, err := d.Db.ExecContext(d.Ctx, stmt, r.ID, r.CurrencyPair, r.ExchangeRate, r.CreatedAt); err != nil {
 		return nil, fmt.Errorf("Create error %w", err)
 	}
@@ -46,10 +46,10 @@ func (d *Dal) Read(currencyPair string, createdAt *time.Time) (*model.Rate, erro
 	var err error
 
 	if createdAt != nil {
-		stmt = `SELECT id, currency_pair, exchange_rate, created_at FROM rate WHERE currency_pair = ? AND created_at <= ? ORDER BY created_at ASC`
+		stmt = `SELECT id, currency_pair, exchange_rate, created_at FROM rate WHERE currency_pair = $1 AND created_at <= $2 ORDER BY created_at ASC`
 		row, err = d.Db.QueryContext(d.Ctx, stmt, currencyPair, *createdAt)
 	} else {
-		stmt = `SELECT id, currency_pair, exchange_rate, created_at FROM rate WHERE currency_pair = ? ORDER BY created_at DESC`
+		stmt = `SELECT id, currency_pair, exchange_rate, created_at FROM rate WHERE currency_pair = $1 ORDER BY created_at DESC`
 		row, err = d.Db.QueryContext(d.Ctx, stmt, currencyPair)
 	}
 
@@ -74,7 +74,7 @@ func (d *Dal) Read(currencyPair string, createdAt *time.Time) (*model.Rate, erro
 }
 
 func (d *Dal) ReadRange(currencyPair string, startTimestamp time.Time, endTimestamp time.Time) (*model.AvgRate, error) {
-	const stmt = `SELECT SUM(exchange_rate) as s, COUNT(1) AS c FROM rate WHERE currency_pair = ? AND created_at >= ? AND created_at <= ?`
+	const stmt = `SELECT SUM(exchange_rate) as s, COUNT(1) AS c FROM rate WHERE currency_pair = $1 AND created_at >= $2 AND created_at <= $3`
 	row, err := d.Db.QueryContext(d.Ctx, stmt, currencyPair, startTimestamp, endTimestamp)
 	if err != nil {
 		return nil, fmt.Errorf("Query error %w", err)

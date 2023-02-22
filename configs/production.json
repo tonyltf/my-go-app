@@ -1,0 +1,6 @@
+{
+  "DB_DRIVER": "postgres",
+  "DB_CONNECTION": "postgresql://wzjiyqbrgkjlcd:cd6db52969e5ed6d00866a63085909971002865aa850007f0c2cd53361e257c5@ec2-3-217-251-77.compute-1.amazonaws.com/d3pthmtnctij5b",
+  "API_INTERVAL": 60,
+  "API_SOURCE": "kraken"
+}

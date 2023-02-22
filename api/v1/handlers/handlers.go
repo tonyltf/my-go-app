@@ -8,7 +8,6 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	_ "github.com/mattn/go-sqlite3"
 )
 
 func Routes() *chi.Mux {
@@ -44,7 +43,7 @@ func GetLastExchangePrice(w http.ResponseWriter, r *http.Request) {
 
 	rate, err := service.GetRate(context.Background(), exchangePair, timestamp)
 	if err != nil {
-		fmt.Printf("Error in handler: %v", err)
+		fmt.Printf("Error in handler: %v\n", err)
 		if err.Error() == messages.Error.MISSING_EXCHANGE_RATE {
 			http.Error(w, http.StatusText(404), 404)
 			return
@@ -79,7 +78,7 @@ func GetAvgExchangePrice(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("Average price for %s from %s to %s.\n", exchangePair, from, to)
 	rate, err := service.GetAvgRate(context.Background(), exchangePair, from, to)
 	if err != nil {
-		fmt.Printf("Error in handler: %v", err)
+		fmt.Printf("Error in handler: %v\n", err)
 		if err.Error() == messages.Error.MISSING_EXCHANGE_RATE {
 			http.Error(w, http.StatusText(404), 404)
 			return

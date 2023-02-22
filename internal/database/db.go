@@ -5,10 +5,8 @@ import (
 	"database/sql"
 	"fmt"
 	config "my-go-app/configs"
-	"path/filepath"
-	"runtime"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/lib/pq"
 )
 
 // Reference: https://github.com/g8rswimmer/go-data-access-example
@@ -17,18 +15,15 @@ func Open(ctx context.Context, stmts []string) (*sql.DB, error) {
 	dbSource := envConfig.DbConnection
 	dbDrive := envConfig.DbDriver
 
-	_, b, _, _ := runtime.Caller(0)
-	basepath := filepath.Dir(b)
-
-	db, err := sql.Open(dbDrive, basepath+"/../../"+dbSource)
+	db, err := sql.Open(dbDrive, dbSource)
 	if err != nil {
-		return nil, fmt.Errorf("sqlite database open error %w", err)
+		return nil, fmt.Errorf(dbDrive+" database open error %w", err)
 	}
 
 	for _, stmt := range stmts {
 		if _, err := db.ExecContext(ctx, stmt); err != nil {
 			db.Close()
-			return nil, fmt.Errorf("sqlite database statment (%s) error %w", stmt, err)
+			return nil, fmt.Errorf(dbDrive+" database statment (%s) error %w", stmt, err)
 		}
 	}
 	return db, nil

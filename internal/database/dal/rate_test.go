@@ -11,7 +11,7 @@ import (
 
 	testfixtures "github.com/go-testfixtures/testfixtures/v3"
 	"github.com/google/uuid"
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/lib/pq"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -24,32 +24,20 @@ var (
 func TestMain(m *testing.M) {
 	var err error
 
-	if _, err = os.Stat("../../../database_test.db"); err == nil {
-		err := os.Remove("../../../database_test.db")
-		if err != nil {
-			fmt.Println(err)
-		}
-	} else {
-		file, err := os.Create("../../../database_test.db")
-		if err != nil {
-			fmt.Println(err)
-		}
-		file.Close()
-	}
-
-	db, err = sql.Open("sqlite3", "database_test.db")
+	db, err = sql.Open("postgres", "dbname=myapp_test")
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	if _, err := db.Exec(RateTable); err != nil {
+		fmt.Println("database statment error %w", err)
 		db.Close()
-		fmt.Println("sqlite database statment error %w", err)
+		return
 	}
 
 	fixtures, err = testfixtures.New(
 		testfixtures.Database(db),
-		testfixtures.Dialect("sqlite3"),
+		testfixtures.Dialect("postgres"),
 		testfixtures.Directory("../../../test/testdata"),
 	)
 	if err != nil {
