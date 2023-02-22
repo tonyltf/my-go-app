@@ -1,0 +1,32 @@
+
+services:
+  exchange-rate:
+    build: 
+      context: .
+      dockerfile: ./build/Dockerfile
+    environment:
+      - ENV=LOCAL
+    ports:
+      - "80:80"
+    networks:
+      - backend
+  db:
+    image: postgres:15.2-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=test
+    ports:
+      - '5432:5432'
+    volumes: 
+      - db:/var/lib/postgresql/data
+    networks:
+      - backend
+volumes:
+  db:
+    driver: local
+
+networks:
+  backend:
+    name: backend-network
