@@ -20,7 +20,7 @@ func InitConfig() (config *envConfigs) {
 	_, b, _, _ := runtime.Caller(0)
 	configpath := filepath.Dir(b)
 	viper.AddConfigPath(configpath)
-	viper.SetConfigName("default")
+	viper.SetConfigName("default.json")
 	viper.SetConfigType("json")
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatal("Error reading env file: ", err)
