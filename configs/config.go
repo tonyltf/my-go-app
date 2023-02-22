@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -18,7 +17,6 @@ type envConfigs struct {
 }
 
 func InitConfig() (config *envConfigs) {
-	fmt.Println(os.Getenv("ENV"))
 	env := os.Getenv("ENV")
 	_, b, _, _ := runtime.Caller(0)
 	configpath := filepath.Dir(b)
