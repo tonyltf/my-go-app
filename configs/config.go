@@ -21,9 +21,9 @@ func InitConfig() (config *envConfigs) {
 	configpath := filepath.Dir(b)
 	viper.AddConfigPath(configpath)
 	viper.SetConfigName("default")
-	viper.SetConfigType("env")
+	viper.SetConfigType("json")
 	if err := viper.ReadInConfig(); err != nil {
-		log.Fatal("Error reading env file", err)
+		log.Fatal("Error reading env file: ", err)
 	}
 
 	// Viper unmarshals the loaded env varialbes into the struct
