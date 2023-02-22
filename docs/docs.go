@@ -81,13 +81,15 @@ const docTemplate = `{
                         "type": "string",
                         "description": "From time",
                         "name": "from",
-                        "in": "query"
+                        "in": "query",
+                        "required": true
                     },
                     {
                         "type": "string",
                         "description": "To time",
                         "name": "to",
-                        "in": "query"
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {

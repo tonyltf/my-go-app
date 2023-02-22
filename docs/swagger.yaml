@@ -49,10 +49,12 @@ paths:
       - description: From time
         in: query
         name: from
+        required: true
         type: string
       - description: To time
         in: query
         name: to
+        required: true
         type: string
       responses:
         "200":

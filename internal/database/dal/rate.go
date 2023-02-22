@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"my-go-app/internal/database/model"
+	"my-go-app/internal/messages"
 	"time"
 
 	"github.com/google/uuid"
@@ -73,21 +74,25 @@ func (d *Dal) Read(currencyPair string, createdAt *time.Time) (*model.Rate, erro
 }
 
 func (d *Dal) ReadRange(currencyPair string, startTimestamp time.Time, endTimestamp time.Time) (*model.AvgRate, error) {
-	const stmt = `SELECT SUM(exchange_rate)/COUNT(1) AS avg FROM rate WHERE currency_pair = ? AND created_at >= ? AND created_at <= ?`
+	const stmt = `SELECT SUM(exchange_rate) as s, COUNT(1) AS c FROM rate WHERE currency_pair = ? AND created_at >= ? AND created_at <= ?`
 	row, err := d.Db.QueryContext(d.Ctx, stmt, currencyPair, startTimestamp, endTimestamp)
 	if err != nil {
 		return nil, fmt.Errorf("Query error %w", err)
 	}
 	defer row.Close()
-	var avg float64
+	var s float64
+	var c float64
 	if row.Next() {
-		err = row.Scan(&avg)
+		err = row.Scan(&s, &c)
+		if s == 0 || c == 0 {
+			return nil, fmt.Errorf(messages.Error.MISSING_EXCHANGE_RATE)
+		}
 		if err != nil {
 			return nil, fmt.Errorf("Scan error %w", err)
 		}
 		return &model.AvgRate{
 			CurrencyPair:  currencyPair,
-			ExchangeRate:  avg,
+			ExchangeRate:  s / c,
 			FromCreatedAt: startTimestamp,
 			ToCreatedAt:   endTimestamp,
 		}, nil
