@@ -37,7 +37,11 @@ func GetRate(ctx context.Context, currencyPair string, timestamp string) (*strin
 		timestampValue = time.Unix(i, 0)
 		timestampPointer = &timestampValue
 	}
-	rate, err := dal.Read(ctx, db, base+target, timestampPointer)
+	myDal := &dal.Dal{
+		Ctx: ctx,
+		Db:  db,
+	}
+	rate, err := myDal.Read(base+target, timestampPointer)
 	if err != nil {
 		fmt.Printf("Error in reading rate %v\n", err)
 		return nil, fmt.Errorf("Error in reading rate %v\n", err)

@@ -10,7 +10,12 @@ import (
 	"github.com/google/uuid"
 )
 
-func Create(ctx context.Context, db *sql.DB, rate *model.Rate) (*model.Rate, error) {
+type Dal struct {
+	Ctx context.Context
+	Db  *sql.DB
+}
+
+func (d *Dal) Create(rate *model.Rate) (*model.Rate, error) {
 
 	if rate == nil {
 		return nil, fmt.Errorf("Rate is nil")
@@ -23,14 +28,14 @@ func Create(ctx context.Context, db *sql.DB, rate *model.Rate) (*model.Rate, err
 	}
 
 	const stmt = `INSERT INTO rate (id, currency_pair, exchange_rate, created_at) VALUES (?, ?, ?, ?)`
-	if _, err := db.ExecContext(ctx, stmt, r.ID, r.CurrencyPair, r.ExchangeRate, r.CreatedAt); err != nil {
+	if _, err := d.Db.ExecContext(d.Ctx, stmt, r.ID, r.CurrencyPair, r.ExchangeRate, r.CreatedAt); err != nil {
 		return nil, fmt.Errorf("Create error %w", err)
 	}
 	return r, nil
 
 }
 
-func Read(ctx context.Context, db *sql.DB, currencyPair string, createdAt *time.Time) (*model.Rate, error) {
+func (d *Dal) Read(currencyPair string, createdAt *time.Time) (*model.Rate, error) {
 	var id string
 	var currency_pair string
 	var exchange_rate float64
@@ -41,14 +46,14 @@ func Read(ctx context.Context, db *sql.DB, currencyPair string, createdAt *time.
 
 	if createdAt != nil {
 		stmt = `SELECT id, currency_pair, exchange_rate, created_at FROM rate WHERE currency_pair = ? AND created_at <= ? ORDER BY created_at ASC`
-		row, err = db.QueryContext(ctx, stmt, currencyPair, *createdAt)
+		row, err = d.Db.QueryContext(d.Ctx, stmt, currencyPair, *createdAt)
 	} else {
 		stmt = `SELECT id, currency_pair, exchange_rate, created_at FROM rate WHERE currency_pair = ? ORDER BY created_at DESC`
-		row, err = db.QueryContext(ctx, stmt, currencyPair)
+		row, err = d.Db.QueryContext(d.Ctx, stmt, currencyPair)
 	}
 
 	if err != nil {
-		return nil, fmt.Errorf("Read error %w", err)
+		return nil, fmt.Errorf("Query error %w", err)
 	}
 
 	defer row.Close()
@@ -64,5 +69,29 @@ func Read(ctx context.Context, db *sql.DB, currencyPair string, createdAt *time.
 			CreatedAt:    created_at,
 		}, nil
 	}
+	return nil, nil
+}
+
+func (d *Dal) ReadRange(currencyPair string, startTimestamp time.Time, endTimestamp time.Time) (*model.AvgRate, error) {
+	const stmt = `SELECT SUM(exchange_rate)/COUNT(1) AS avg FROM rate WHERE currency_pair = ? AND created_at >= ? AND created_at <= ?`
+	row, err := d.Db.QueryContext(d.Ctx, stmt, currencyPair, startTimestamp, endTimestamp)
+	if err != nil {
+		return nil, fmt.Errorf("Query error %w", err)
+	}
+	defer row.Close()
+	var avg float64
+	if row.Next() {
+		err = row.Scan(&avg)
+		if err != nil {
+			return nil, fmt.Errorf("Scan error %w", err)
+		}
+		return &model.AvgRate{
+			CurrencyPair:  currencyPair,
+			ExchangeRate:  avg,
+			FromCreatedAt: startTimestamp,
+			ToCreatedAt:   endTimestamp,
+		}, nil
+	}
+
 	return nil, nil
 }

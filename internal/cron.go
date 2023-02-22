@@ -30,7 +30,12 @@ func task(ctx context.Context, db *sql.DB) {
 		fmt.Printf("Error in cron job (TransformRate): %v\n", err)
 		return
 	}
-	_, err = dal.Create(ctx, db, rate)
+	myDal := &dal.Dal{
+		Ctx: ctx,
+		Db:  db,
+	}
+
+	_, err = myDal.Create(rate)
 	if err != nil {
 		fmt.Printf("Insert rate error %v\n", err)
 	}

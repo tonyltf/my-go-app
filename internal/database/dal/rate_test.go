@@ -18,6 +18,7 @@ import (
 var (
 	db       *sql.DB
 	fixtures *testfixtures.Loader
+	myDal    *Dal
 )
 
 func TestMain(m *testing.M) {
@@ -54,6 +55,12 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	myDal = &Dal{
+		Ctx: context.Background(),
+		Db:  db,
+	}
+
 	os.Exit(m.Run())
 }
 
@@ -70,7 +77,7 @@ func TestCreate(t *testing.T) {
 		ExchangeRate: 25000.0,
 		CreatedAt:    time.Now(),
 	}
-	newRate, err := Create(context.Background(), db, rate)
+	newRate, err := myDal.Create(rate)
 	if err != nil {
 		t.Errorf("Error when create new record: %v", err)
 	}
@@ -79,18 +86,52 @@ func TestCreate(t *testing.T) {
 
 func TestRead(t *testing.T) {
 	prepareTestDatabase()
-	created_at, err := time.Parse("2006-01-02 15:04:05", "2023-02-20 00:00:00")
+	createdAt, err := time.Parse("2006-01-02 15:04:05", "2023-02-20 00:00:00")
 	if err != nil {
 		t.Errorf("Error when setting CreatedAt: %v", err)
 	}
-	// r := &model.Rate{
-	// 	CurrencyPair: "BTCUSD",
-	// 	CreatedAt:    created_at,
-	// }
-	rate, err := Read(context.Background(), db, "BTCUSD", &created_at)
+	rate, err := myDal.Read("BTCUSD", &createdAt)
 	if err != nil {
 		t.Errorf("Error when reading database: %v", err)
 	}
 	assert.NotNil(t, rate)
 	assert.Equal(t, 25000.0, rate.ExchangeRate)
+}
+
+// Test all 2 testdata sets
+func TestReadRange(t *testing.T) {
+	prepareTestDatabase()
+	fromCreatedAt, err := time.Parse("2006-01-02 15:04:05", "2023-02-19 00:00:00")
+	if err != nil {
+		t.Errorf("Error when setting CreatedAt: %v", err)
+	}
+	toCreatedAt, err := time.Parse("2006-01-02 15:04:05", "2023-03-01 00:00:00")
+	if err != nil {
+		t.Errorf("Error when setting CreatedAt: %v", err)
+	}
+	rate, err := myDal.ReadRange("BTCUSD", fromCreatedAt, toCreatedAt)
+	if err != nil {
+		t.Errorf("Error when reading database: %v", err)
+	}
+	assert.NotNil(t, rate)
+	assert.Equal(t, 26000.0, rate.ExchangeRate)
+}
+
+// Test only 1 testdata set
+func TestReadRange2(t *testing.T) {
+	prepareTestDatabase()
+	fromCreatedAt, err := time.Parse("2006-01-02 15:04:05", "2023-02-20 00:00:00")
+	if err != nil {
+		t.Errorf("Error when setting CreatedAt: %v", err)
+	}
+	toCreatedAt, err := time.Parse("2006-01-02 15:04:05", "2023-03-01 00:00:00")
+	if err != nil {
+		t.Errorf("Error when setting CreatedAt: %v", err)
+	}
+	rate, err := myDal.ReadRange("BTCUSD", fromCreatedAt, toCreatedAt)
+	if err != nil {
+		t.Errorf("Error when reading database: %v", err)
+	}
+	assert.NotNil(t, rate)
+	assert.Equal(t, 27000.0, rate.ExchangeRate)
 }
