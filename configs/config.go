@@ -27,7 +27,7 @@ func InitConfig() (config *envConfigs) {
 	viper.AddConfigPath("/app")
 	viper.AddConfigPath("/app/configs")
 	viper.AddConfigPath("/my-go-app/configs")
-	if env == "PRODUCTIOn" {
+	if env == "PRODUCTION" {
 		viper.SetConfigName("production.json")
 	} else {
 		viper.SetConfigName("default.json")
