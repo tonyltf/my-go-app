@@ -20,6 +20,15 @@ API Document: `http://localhost/swagger/index.html`
   
 API Document: `https://my-go-app.herokuapp.com/swagger/index.html`
 
+## Background
+
+### Stack
+
+* Go-Chi is the suggested framework
+* SQLite was planned to use originally because it is easy to setup for local hosting.  But then deployed on Heroku and found it is not supported
+* Postgres is the selected database because I want to enable transforming different source into the same schema so it will be easier for querying the price / average price
+* Didn't plan to use NoSQL because the data insertion looks not very frequently
+
 ## Enhancement
 
 ### Business
@@ -38,3 +47,4 @@ API Document: `https://my-go-app.herokuapp.com/swagger/index.html`
 * Error handling - Should have centralized error logging / handling so we can do something like alert / notification
 * Logging - better loggin mechanism like fluentd
 * Data pipeline - more decoupled data pipeline like ELT instead of directly dumping into the database
+* Some testing is missing - factory pattern is not tested
