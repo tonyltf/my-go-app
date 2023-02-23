@@ -6,7 +6,8 @@
 
 ## Run (Docker)
 
-`docker-compose build && docker-compose up`
+`docker-compose build`
+`docker-compose up`
 API Document: `http://localhost/swagger/index.html`
 
 ## Deployment (Read-only)
@@ -20,7 +21,7 @@ API Document: `https://my-go-app.herokuapp.com/swagger/index.html`
 
 ## Enhancement
 
-### Business 
+### Business
 
 * Better handling of exchange rate not found, I think it is kind of business/product requirement because of a few concerns
   * data in the current database does not reflect the complete history of exchange rate
